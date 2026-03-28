@@ -1,0 +1,13 @@
+[package]
+name = "rust-utils"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+
+[workspace]
+members = [
+  "crates/cat",
+  "crates/grep",
+  "crates/common",
+]
