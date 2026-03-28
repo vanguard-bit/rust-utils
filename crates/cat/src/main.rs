@@ -1,5 +1,4 @@
 mod cli;
-mod reader;
 mod run;
 
 use std::process;

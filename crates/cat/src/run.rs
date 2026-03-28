@@ -1,38 +1,39 @@
-use crate::reader::get_file;
 use std::{
-    error::Error,
-    io::{self, BufRead},
+    fs::File,
+    io::{self, Read, copy},
 };
-fn process_reader<R: BufRead>(reader: R) -> io::Result<()> {
-    for line in reader.lines() {
-        println!("{}", line?);
-    }
+
+fn process_reader<R: Read>(reader: R) -> io::Result<()> {
+    let mut writer = io::stdout().lock();
+    let mut reader = reader;
+    copy(&mut reader, &mut writer)?;
     Ok(())
 }
 
-pub fn print_file(file_path: &str) -> Result<(), Box<dyn Error>> {
-    let reader = get_file(file_path)?;
-    process_reader(reader)?;
-    Ok(())
-}
-
-pub fn print_files(file_paths: &Vec<String>) -> Result<(), Box<dyn Error>> {
+pub fn print_files(file_paths: &[String]) -> io::Result<()> {
     let mut had_error = false;
+    let mut writer = io::stdout().lock();
     if file_paths.is_empty() {
         if let Err(e) = process_reader(io::stdin().lock()) {
             eprintln!("{}", e);
             had_error = true;
         }
     } else {
-        for file_path in file_paths.iter() {
-            if let Err(e) = print_file(&file_path) {
-                eprintln!("{}", e);
-                had_error = true;
+        for file_path in file_paths {
+            match File::open(file_path) {
+                Err(e) => {
+                    eprintln!("{}", e);
+                    had_error = true;
+                }
+                Ok(reader) => {
+                    let mut reader = reader;
+                    copy(&mut reader, &mut writer)?;
+                }
             }
         }
     }
     if had_error {
-        Err("Error(s) occured.".into())
+        Err(io::Error::new(io::ErrorKind::Other, "Error(s) occurred"))
     } else {
         Ok(())
     }
