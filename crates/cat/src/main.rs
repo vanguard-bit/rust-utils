@@ -7,9 +7,7 @@ use std::process;
 use clap::Parser;
 fn main() {
     let args = cli::Args::parse();
-    // TODO: implement multiple file reader
-    if let Err(e) = run::print_file(&args.name[0]) {
-        eprintln!("{}", e);
+    if let Err(_) = run::print_files(&(args.files)) {
         process::exit(1);
     }
 }

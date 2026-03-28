@@ -15,3 +15,25 @@ pub fn print_file(file_path: &str) -> Result<(), Box<dyn Error>> {
     process_reader(reader)?;
     Ok(())
 }
+
+pub fn print_files(file_paths: &Vec<String>) -> Result<(), Box<dyn Error>> {
+    let mut had_error = false;
+    if file_paths.is_empty() {
+        if let Err(e) = process_reader(io::stdin().lock()) {
+            eprintln!("{}", e);
+            had_error = true;
+        }
+    } else {
+        for file_path in file_paths.iter() {
+            if let Err(e) = print_file(&file_path) {
+                eprintln!("{}", e);
+                had_error = true;
+            }
+        }
+    }
+    if had_error {
+        Err("Error(s) occured.".into())
+    } else {
+        Ok(())
+    }
+}
