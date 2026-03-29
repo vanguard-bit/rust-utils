@@ -1,3 +1,3 @@
 # rust-utils
 
-[![CI](https://github.com/vanguard-bit/rust-utils/actions/workflows/ci.yml/badge.svg)](https://github.com/vanguard-bit/rust-utils/actions)
+[![Rust](https://github.com/vanguard-bit/rust-utils/actions/workflows/rust.yml/badge.svg)](https://github.com/vanguard-bit/rust-utils/actions/workflows/rust.yml)
